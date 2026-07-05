@@ -1,0 +1,165 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+  Warm-scholarly design system.
+  All colors are CSS variables so a dark theme can be layered on later
+  by overriding this single block (see CLAUDE.md).
+*/
+:root {
+  --paper: #faf9f6; /* app background            */
+  --surface: #ffffff; /* cards, raised panels      */
+  --surface-2: #f4f2ec; /* subtle fills, hovers      */
+  --ink: #1a1a1a; /* primary text              */
+  --ink-soft: #4b4741; /* secondary text            */
+  --muted: #8a8378; /* tertiary text, meta       */
+  --line: #e7e3db; /* borders, dividers         */
+  --accent: #0f5257; /* deep teal — primary accent*/
+  --accent-ink: #0b3b3f; /* accent hover / active     */
+  --accent-soft: #e3efef; /* accent tint background    */
+  --danger: #9a3b2f;
+  --success: #2f6b4f;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Comfortable, book-like reading for long notes. */
+.note-prose {
+  font-family: var(--font-serif);
+  font-size: 1.075rem;
+  line-height: 1.85;
+  color: var(--ink);
+  max-width: 72ch;
+}
+.note-prose h1,
+.note-prose h2,
+.note-prose h3,
+.note-prose h4 {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.note-prose h2 {
+  margin-top: 2.2em;
+  margin-bottom: 0.6em;
+  font-size: 1.6rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.3em;
+}
+.note-prose h3 {
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+  font-size: 1.3rem;
+}
+.note-prose p {
+  margin: 0 0 1.15em;
+}
+.note-prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.note-prose a:hover {
+  color: var(--accent-ink);
+}
+.note-prose ul,
+.note-prose ol {
+  margin: 0 0 1.15em 1.4em;
+}
+.note-prose ul {
+  list-style: disc;
+}
+.note-prose ol {
+  list-style: decimal;
+}
+.note-prose li {
+  margin: 0.35em 0;
+}
+.note-prose blockquote {
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  padding: 0.6em 1em;
+  margin: 1.4em 0;
+  color: var(--ink-soft);
+  border-radius: 0 6px 6px 0;
+}
+.note-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  margin: 1.4em auto;
+  display: block;
+}
+.note-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.note-prose th,
+.note-prose td {
+  border: 1px solid var(--line);
+  padding: 0.55em 0.8em;
+  text-align: left;
+  vertical-align: top;
+}
+.note-prose th {
+  background: var(--surface-2);
+  font-weight: 600;
+}
+.note-prose pre {
+  background: #14201f;
+  color: #e6f2f1;
+  padding: 1em 1.1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.4em 0;
+  font-size: 0.9rem;
+}
+.note-prose code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+.note-prose :not(pre) > code {
+  background: var(--surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Focus ring used across interactive elements */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
