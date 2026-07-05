@@ -163,3 +163,39 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* TipTap editor surface */
+.tiptap {
+  min-height: 320px;
+}
+.tiptap:focus {
+  outline: none;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  content: "Start writing the note…";
+  color: var(--muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+/* Label the special code blocks so the admin can tell them apart.
+   TipTap renders the language as a class on the inner <code>. */
+.tiptap pre:has(code.language-mermaid)::before,
+.tiptap pre:has(code.language-math)::before {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9fb7b5;
+}
+.tiptap pre:has(code.language-mermaid)::before {
+  content: "Mermaid diagram";
+}
+.tiptap pre:has(code.language-math)::before {
+  content: "Math (KaTeX)";
+}
+.tiptap .ProseMirror-selectednode {
+  outline: 2px solid var(--accent);
+}
