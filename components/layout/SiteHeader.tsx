@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { SearchBox } from "@/components/public/SearchBox";
 
 const navLinks = [
   { href: "/syllabus", label: "Syllabus" },
   { href: "/pyqs", label: "PYQ Vault" },
-  { href: "/search", label: "Search" },
 ];
 
 export function SiteHeader() {
@@ -24,6 +24,10 @@ export function SiteHeader() {
           <span className="hidden sm:inline">APPSC Group 1</span>
         </Link>
 
+        <div className="hidden max-w-xs flex-1 md:block">
+          <SearchBox />
+        </div>
+
         <nav className="flex items-center gap-1 text-sm">
           {navLinks.map((l) => (
             <Link
@@ -34,6 +38,12 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/search"
+            className="rounded-md px-3 py-1.5 text-ink-soft transition-colors hover:bg-surface-2 hover:text-ink focus-ring md:hidden"
+          >
+            Search
+          </Link>
         </nav>
       </Container>
     </header>
