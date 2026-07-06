@@ -102,13 +102,15 @@ export async function getNoteBySlug(slug: string): Promise<NotePageData | null> 
   if (!isSupabaseConfigured) return null;
   const supabase = await createClient();
 
+  // Tags are embedded through the note (note_tags → notes), not the micro-theme:
+  // note_tags has no foreign key to microthemes, so embedding it there errors.
   const { data, error } = await supabase
     .from("microthemes")
     .select(
       `id, topic, subtopic, title, slug, short_description,
        subject:subjects ( id, name, stage, paper ),
-       notes ( id, title, content, status, updated_at ),
-       note_tags ( tag:tags ( id, name, slug ) )`,
+       notes ( id, title, content, status, updated_at,
+               note_tags ( tag:tags ( id, name, slug ) ) )`,
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -119,6 +121,11 @@ export async function getNoteBySlug(slug: string): Promise<NotePageData | null> 
   const publishedNote =
     asArray(row.notes).find((n) => n.status === "published") ?? null;
   const subject = asArray(row.subject)[0] ?? null;
+  const tags = publishedNote
+    ? asArray(publishedNote.note_tags)
+        .map((nt) => nt.tag)
+        .filter(Boolean)
+    : [];
 
   return {
     microtheme: {
@@ -130,8 +137,16 @@ export async function getNoteBySlug(slug: string): Promise<NotePageData | null> 
       short_description: row.short_description,
     },
     subject,
-    note: publishedNote,
-    tags: asArray(row.note_tags).map((nt) => nt.tag).filter(Boolean),
+    note: publishedNote
+      ? {
+          id: publishedNote.id,
+          title: publishedNote.title,
+          content: publishedNote.content,
+          status: publishedNote.status,
+          updated_at: publishedNote.updated_at,
+        }
+      : null,
+    tags,
   };
 }
 
@@ -153,6 +168,17 @@ type RawSubject = {
   }[] | null;
 };
 
+type RawNoteWithTags = {
+  id: string;
+  title: string;
+  content: unknown;
+  status: NoteStatus;
+  updated_at: string;
+  note_tags: { tag: { id: string; name: string; slug: string } }[] | null;
+};
+
+type RawSubjectRef = { id: string; name: string; stage: Stage; paper: string | null };
+
 type RawMicrothemeWithNote = {
   id: string;
   topic: string;
@@ -160,9 +186,6 @@ type RawMicrothemeWithNote = {
   title: string;
   slug: string;
   short_description: string | null;
-  subject: { id: string; name: string; stage: Stage; paper: string | null } | null;
-  notes:
-    | { id: string; title: string; content: unknown; status: NoteStatus; updated_at: string }[]
-    | null;
-  note_tags: { tag: { id: string; name: string; slug: string } }[] | null;
+  subject: RawSubjectRef | RawSubjectRef[] | null;
+  notes: RawNoteWithTags | RawNoteWithTags[] | null;
 };
