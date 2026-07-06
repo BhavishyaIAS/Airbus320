@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
+import { asArray } from "@/lib/utils";
 import type { NoteStatus, Stage } from "@/lib/types/database";
 
 /* ---- Assembled shapes returned to the UI ---------------------------------- */
@@ -73,7 +74,7 @@ export async function getSyllabus(): Promise<SyllabusSubject[]> {
   // Group each subject's micro-themes by topic, preserving order.
   return (data as unknown as RawSubject[]).map((s) => {
     const topicMap = new Map<string, SyllabusMicrotheme[]>();
-    for (const mt of s.microthemes ?? []) {
+    for (const mt of asArray(s.microthemes)) {
       const list = topicMap.get(mt.topic) ?? [];
       list.push({
         id: mt.id,
@@ -82,7 +83,7 @@ export async function getSyllabus(): Promise<SyllabusSubject[]> {
         title: mt.title,
         slug: mt.slug,
         short_description: mt.short_description,
-        hasPublishedNote: (mt.notes ?? []).some((n) => n.status === "published"),
+        hasPublishedNote: asArray(mt.notes).some((n) => n.status === "published"),
       });
       topicMap.set(mt.topic, list);
     }
@@ -116,7 +117,8 @@ export async function getNoteBySlug(slug: string): Promise<NotePageData | null> 
   const row = data as unknown as RawMicrothemeWithNote;
 
   const publishedNote =
-    (row.notes ?? []).find((n) => n.status === "published") ?? null;
+    asArray(row.notes).find((n) => n.status === "published") ?? null;
+  const subject = asArray(row.subject)[0] ?? null;
 
   return {
     microtheme: {
@@ -127,9 +129,9 @@ export async function getNoteBySlug(slug: string): Promise<NotePageData | null> 
       slug: row.slug,
       short_description: row.short_description,
     },
-    subject: row.subject ?? null,
+    subject,
     note: publishedNote,
-    tags: (row.note_tags ?? []).map((nt) => nt.tag).filter(Boolean),
+    tags: asArray(row.note_tags).map((nt) => nt.tag).filter(Boolean),
   };
 }
 

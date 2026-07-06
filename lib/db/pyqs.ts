@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
+import { asArray } from "@/lib/utils";
 import type { PyqOption, Stage } from "@/lib/types/database";
 
 export type PyqFilters = {
@@ -121,11 +122,11 @@ export async function getPyqs(filters: PyqFilters): Promise<PyqView[]> {
     correct_answer: p.correct_answer,
     marks: p.marks,
     source: p.source,
-    microthemes: (p.pyq_microthemes ?? [])
+    microthemes: asArray(p.pyq_microthemes)
       .map((x) => x.microtheme)
       .filter(Boolean) as PyqView["microthemes"],
-    tags: (p.pyq_tags ?? []).map((x) => x.tag).filter(Boolean) as PyqView["tags"],
-    modelAnswer: p.model_answers?.[0]?.content ?? null,
+    tags: asArray(p.pyq_tags).map((x) => x.tag).filter(Boolean) as PyqView["tags"],
+    modelAnswer: asArray(p.model_answers)[0]?.content ?? null,
   }));
 }
 

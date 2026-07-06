@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { asArray } from "@/lib/utils";
 import type { NoteStatus, PyqOption, Stage } from "@/lib/types/database";
 
 /* Admin-side reads. The admin session's RLS lets these see drafts too. */
@@ -58,8 +59,8 @@ export async function listMicrothemes(): Promise<AdminMicrotheme[]> {
     slug: m.slug,
     display_order: m.display_order,
     short_description: m.short_description,
-    subjectName: m.subject?.name ?? null,
-    noteStatus: m.notes?.[0]?.status ?? null,
+    subjectName: asArray(m.subject)[0]?.name ?? null,
+    noteStatus: asArray(m.notes)[0]?.status ?? null,
   }));
 }
 
@@ -178,9 +179,9 @@ function mapAdminPyq(p: RawAdminPyq): AdminPyq {
     correct_answer: p.correct_answer,
     marks: p.marks,
     source: p.source,
-    microthemeIds: (p.pyq_microthemes ?? []).map((x) => x.microtheme_id),
-    tagIds: (p.pyq_tags ?? []).map((x) => x.tag_id),
-    hasModelAnswer: (p.model_answers ?? []).length > 0,
+    microthemeIds: asArray(p.pyq_microthemes).map((x) => x.microtheme_id),
+    tagIds: asArray(p.pyq_tags).map((x) => x.tag_id),
+    hasModelAnswer: asArray(p.model_answers).length > 0,
   };
 }
 
