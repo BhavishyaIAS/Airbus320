@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Claude Code AI tooling / skills (installed per-environment, not product code)
+.claude/skills/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
