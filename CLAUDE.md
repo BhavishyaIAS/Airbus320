@@ -85,7 +85,7 @@ polity), so the content structure must let AP micro-themes be organized clearly.
 2. DB schema + migrations + RLS + seed. ← done
 3. Public read: syllabus tree + note rendering. ← done
 4. Admin auth + micro-theme management + TipTap editor. ← done
-5. PYQ vault + admin PYQ management + model answers.
+5. PYQ vault + admin PYQ management + model answers. ← done
 6. Search, polish, mobile QA.
 7. Deploy to Vercel + custom domain.
 

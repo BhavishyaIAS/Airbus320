@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { NoteStatus, Stage } from "@/lib/types/database";
+import type { NoteStatus, PyqOption, Stage } from "@/lib/types/database";
 
 /* Admin-side reads. The admin session's RLS lets these see drafts too. */
 
@@ -120,4 +120,96 @@ export async function getAdminStats(): Promise<AdminStats> {
     draftNotes: draft.count ?? 0,
     pyqs: pyqs.count ?? 0,
   };
+}
+
+/* ---- Tags & PYQs (admin) -------------------------------------------------- */
+
+export type AdminTag = { id: string; name: string; slug: string };
+
+export async function listTags(): Promise<AdminTag[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("tags")
+    .select("id, name, slug")
+    .order("name");
+  return (data as AdminTag[]) ?? [];
+}
+
+export type AdminPyq = {
+  id: string;
+  stage: Stage;
+  year: number | null;
+  question_text: string;
+  options: PyqOption[] | null;
+  correct_answer: string | null;
+  marks: number | null;
+  source: string | null;
+  microthemeIds: string[];
+  tagIds: string[];
+  hasModelAnswer: boolean;
+};
+
+type RawAdminPyq = {
+  id: string;
+  stage: Stage;
+  year: number | null;
+  question_text: string;
+  options: PyqOption[] | null;
+  correct_answer: string | null;
+  marks: number | null;
+  source: string | null;
+  pyq_microthemes: { microtheme_id: string }[] | null;
+  pyq_tags: { tag_id: string }[] | null;
+  model_answers: { id: string }[] | null;
+};
+
+const PYQ_ADMIN_SELECT = `id, stage, year, question_text, options, correct_answer, marks, source,
+  pyq_microthemes ( microtheme_id ),
+  pyq_tags ( tag_id ),
+  model_answers ( id )`;
+
+function mapAdminPyq(p: RawAdminPyq): AdminPyq {
+  return {
+    id: p.id,
+    stage: p.stage,
+    year: p.year,
+    question_text: p.question_text,
+    options: p.options,
+    correct_answer: p.correct_answer,
+    marks: p.marks,
+    source: p.source,
+    microthemeIds: (p.pyq_microthemes ?? []).map((x) => x.microtheme_id),
+    tagIds: (p.pyq_tags ?? []).map((x) => x.tag_id),
+    hasModelAnswer: (p.model_answers ?? []).length > 0,
+  };
+}
+
+export async function listPyqsAdmin(): Promise<AdminPyq[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("pyqs")
+    .select(PYQ_ADMIN_SELECT)
+    .order("year", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+  return ((data as unknown as RawAdminPyq[]) ?? []).map(mapAdminPyq);
+}
+
+export async function getPyqAdmin(id: string): Promise<AdminPyq | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("pyqs")
+    .select(PYQ_ADMIN_SELECT)
+    .eq("id", id)
+    .maybeSingle();
+  return data ? mapAdminPyq(data as unknown as RawAdminPyq) : null;
+}
+
+export async function getModelAnswer(pyqId: string): Promise<unknown | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("model_answers")
+    .select("content")
+    .eq("pyq_id", pyqId)
+    .maybeSingle();
+  return (data as { content?: unknown } | null)?.content ?? null;
 }
