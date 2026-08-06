@@ -59,6 +59,9 @@ export type Database = {
           slug: string;
           display_order: number;
           short_description: string | null;
+          external_id: string | null;
+          geographic_scope: string | null;
+          cognitive_level: string | null;
           created_at: string;
         };
         Insert: {
@@ -70,6 +73,9 @@ export type Database = {
           slug: string;
           display_order?: number;
           short_description?: string | null;
+          external_id?: string | null;
+          geographic_scope?: string | null;
+          cognitive_level?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["microthemes"]["Insert"]>;

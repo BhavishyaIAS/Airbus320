@@ -7,17 +7,21 @@ import type { NoteStatus, Stage } from "@/lib/types/database";
 
 export type SyllabusMicrotheme = {
   id: string;
-  topic: string;
-  subtopic: string | null;
   title: string;
   slug: string;
-  short_description: string | null;
+  geographicScope: string | null;
   hasPublishedNote: boolean;
+};
+
+export type SyllabusSubtopic = {
+  subtopic: string | null;
+  microthemes: SyllabusMicrotheme[];
 };
 
 export type SyllabusTopic = {
   topic: string;
-  microthemes: SyllabusMicrotheme[];
+  subtopics: SyllabusSubtopic[];
+  count: number;
 };
 
 export type SyllabusSubject = {
@@ -26,7 +30,11 @@ export type SyllabusSubject = {
   stage: Stage;
   paper: string | null;
   topics: SyllabusTopic[];
+  count: number;
+  publishedCount: number;
 };
+
+export type SyllabusFilters = { stage?: Stage; scope?: string };
 
 export type NotePageData = {
   microtheme: {
@@ -55,46 +63,77 @@ export type NotePageData = {
  * whether it has a published note. RLS means anon only ever sees published
  * notes, so a returned note implies it's public.
  */
-export async function getSyllabus(): Promise<SyllabusSubject[]> {
+export async function getSyllabus(
+  filters: SyllabusFilters = {},
+): Promise<SyllabusSubject[]> {
   if (!isSupabaseConfigured) return [];
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("subjects")
     .select(
       `id, name, stage, paper, display_order,
-       microthemes ( id, topic, subtopic, title, slug, display_order, short_description,
+       microthemes ( id, topic, subtopic, title, slug, display_order, geographic_scope,
                      notes ( id, status ) )`,
     )
     .order("display_order", { ascending: true })
     .order("display_order", { referencedTable: "microthemes", ascending: true });
 
+  if (filters.stage) query = query.eq("stage", filters.stage);
+
+  const { data, error } = await query;
   if (error || !data) return [];
 
-  // Group each subject's micro-themes by topic, preserving order.
-  return (data as unknown as RawSubject[]).map((s) => {
-    const topicMap = new Map<string, SyllabusMicrotheme[]>();
+  const out: SyllabusSubject[] = [];
+
+  for (const s of data as unknown as RawSubject[]) {
+    // topic -> (subtopic -> microthemes), preserving insertion order.
+    const topics = new Map<string, Map<string, SyllabusMicrotheme[]>>();
+    let count = 0;
+    let publishedCount = 0;
+
     for (const mt of asArray(s.microthemes)) {
-      const list = topicMap.get(mt.topic) ?? [];
-      list.push({
+      if (filters.scope && mt.geographic_scope !== filters.scope) continue;
+
+      const subKey = mt.subtopic ?? "";
+      if (!topics.has(mt.topic)) topics.set(mt.topic, new Map());
+      const subMap = topics.get(mt.topic)!;
+      if (!subMap.has(subKey)) subMap.set(subKey, []);
+
+      const published = asArray(mt.notes).some((n) => n.status === "published");
+      if (published) publishedCount++;
+      count++;
+
+      subMap.get(subKey)!.push({
         id: mt.id,
-        topic: mt.topic,
-        subtopic: mt.subtopic,
         title: mt.title,
         slug: mt.slug,
-        short_description: mt.short_description,
-        hasPublishedNote: asArray(mt.notes).some((n) => n.status === "published"),
+        geographicScope: mt.geographic_scope ?? null,
+        hasPublishedNote: published,
       });
-      topicMap.set(mt.topic, list);
     }
-    return {
+
+    if (count === 0) continue; // filtered out entirely
+
+    out.push({
       id: s.id,
       name: s.name,
       stage: s.stage,
       paper: s.paper,
-      topics: Array.from(topicMap, ([topic, microthemes]) => ({ topic, microthemes })),
-    };
-  });
+      count,
+      publishedCount,
+      topics: Array.from(topics, ([topic, subMap]) => ({
+        topic,
+        count: Array.from(subMap.values()).reduce((n, l) => n + l.length, 0),
+        subtopics: Array.from(subMap, ([subtopic, microthemes]) => ({
+          subtopic: subtopic === "" ? null : subtopic,
+          microthemes,
+        })),
+      })),
+    });
+  }
+
+  return out;
 }
 
 /** One micro-theme + its published note (if any), subject, and tags, by slug. */
@@ -163,7 +202,7 @@ type RawSubject = {
     subtopic: string | null;
     title: string;
     slug: string;
-    short_description: string | null;
+    geographic_scope: string | null;
     notes: { id: string; status: NoteStatus }[] | null;
   }[] | null;
 };
