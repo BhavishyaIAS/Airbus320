@@ -5,7 +5,7 @@ Guidance for any future session working in this repo. Read this first.
 ## What this is
 
 A production study platform for **APPSC Group 1** (Andhra Pradesh Public Service
-Commission) aspirants. Two core modules:
+Commission) aspirants. Core modules:
 
 1. **Notes Repository** — exhaustive notes organized to the finest "micro-theme"
    of the syllabus. Rich content: headings, images, Mermaid diagrams, embedded
@@ -14,7 +14,14 @@ Commission) aspirants. Two core modules:
    answer; Mains = questions with marks and an optional **model answer**.
    Filterable by micro-theme, tag, year, topic.
 
-Public visitors read notes and use the PYQ vault with **no login**. A single
+3. **MCQ Vault** — a separate practice module of GK/GS MCQs for competitive
+   exams, browsable **Subject → Book (standard reference) → Chapter → MCQs**,
+   solved one-at-a-time with instant feedback, explanations and a score. Tables
+   are `mcq_subjects → mcq_books → mcq_chapters → mcqs` (migration 0005; sample
+   content in `supabase/mcq_seed.sql`). Distinct from the PYQ vault, which is
+   organised by exam year/micro-theme.
+
+Public visitors read notes and use both vaults with **no login**. A single
 **admin** (the product owner) logs in to create/edit/publish everything.
 
 The exam is heavily Andhra-Pradesh-specific (AP history, geography, economy,
@@ -77,7 +84,9 @@ polity), so the content structure must let AP micro-themes be organized clearly.
 
 `subjects → microthemes → notes (1:1 with microtheme)`, plus `tags`/`note_tags`,
 `pyqs` with `pyq_microthemes`/`pyq_tags`, `model_answers` (1:1 with a mains pyq),
-`media`, and `profiles` (role). Full DDL + RLS in `supabase/migrations/`.
+`media`, and `profiles` (role). The MCQ Vault adds
+`mcq_subjects → mcq_books → mcq_chapters → mcqs` (all public-read, admin-write).
+Full DDL + RLS in `supabase/migrations/`.
 
 ## Build phases (see the plan for detail)
 
