@@ -14,6 +14,12 @@ const modules = [
     body: "Previous year Prelims MCQs and Mains questions, filterable by micro-theme, year and tag. Mains questions come with model-answer blueprints.",
     cta: "Open the vault",
   },
+  {
+    href: "/mcqs",
+    title: "MCQ Vault",
+    body: "Practice GK & GS MCQs for competitive exams, organised by subject, standard book and chapter — with instant feedback and explanations.",
+    cta: "Start practising",
+  },
 ];
 
 export default function HomePage() {
@@ -39,7 +45,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="mt-16 grid gap-5 sm:grid-cols-2">
+      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {modules.map((m) => (
           <a
             key={m.href}

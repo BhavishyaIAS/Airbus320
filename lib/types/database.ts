@@ -195,6 +195,100 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["media"]["Insert"]>;
         Relationships: [];
       };
+      mcq_subjects: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          description?: string | null;
+          display_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["mcq_subjects"]["Insert"]>;
+        Relationships: [];
+      };
+      mcq_books: {
+        Row: {
+          id: string;
+          subject_id: string;
+          title: string;
+          author: string | null;
+          slug: string;
+          description: string | null;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          subject_id: string;
+          title: string;
+          author?: string | null;
+          slug: string;
+          description?: string | null;
+          display_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["mcq_books"]["Insert"]>;
+        Relationships: [];
+      };
+      mcq_chapters: {
+        Row: {
+          id: string;
+          book_id: string;
+          title: string;
+          slug: string;
+          chapter_no: number | null;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          book_id: string;
+          title: string;
+          slug: string;
+          chapter_no?: number | null;
+          display_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["mcq_chapters"]["Insert"]>;
+        Relationships: [];
+      };
+      mcqs: {
+        Row: {
+          id: string;
+          chapter_id: string;
+          question_text: string;
+          options: PyqOption[];
+          correct_answer: string;
+          explanation: string | null;
+          difficulty: string | null;
+          display_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          chapter_id: string;
+          question_text: string;
+          options: PyqOption[];
+          correct_answer: string;
+          explanation?: string | null;
+          difficulty?: string | null;
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["mcqs"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {

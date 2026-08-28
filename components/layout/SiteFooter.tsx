@@ -16,6 +16,9 @@ export function SiteFooter() {
           <Link href="/pyqs" className="hover:text-ink focus-ring rounded">
             PYQ Vault
           </Link>
+          <Link href="/mcqs" className="hover:text-ink focus-ring rounded">
+            MCQ Vault
+          </Link>
           <Link
             href="/admin"
             className="hover:text-ink focus-ring rounded"
