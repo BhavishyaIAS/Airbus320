@@ -6,6 +6,7 @@ const nav = [
   { href: "/admin/subjects", label: "Subjects" },
   { href: "/admin/microthemes", label: "Micro-themes" },
   { href: "/admin/pyqs", label: "PYQs" },
+  { href: "/admin/mcqs", label: "MCQ Vault" },
   { href: "/admin/media", label: "Media" },
 ];
 
