@@ -14,7 +14,7 @@ export function SiteFooter() {
             Syllabus
           </Link>
           <Link href="/pyqs" className="hover:text-ink focus-ring rounded">
-            PYQ Vault
+            MCQ Vault
           </Link>
           <Link
             href="/admin"

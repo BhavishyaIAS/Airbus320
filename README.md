@@ -2,7 +2,7 @@
 
 A study platform for aspirants of the **APPSC Group 1** exam (Andhra Pradesh
 Public Service Commission): a micro-theme-level **Notes Repository** and a
-searchable **PYQ Vault** (previous year questions), with a secure admin backend.
+searchable **MCQ Vault** (previous year questions), with a secure admin backend.
 
 Built with Next.js (App Router) + TypeScript + Tailwind CSS, Supabase
 (Postgres / Auth / Storage), TipTap, Mermaid, and KaTeX. Deployed on Vercel.

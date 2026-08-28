@@ -8,7 +8,7 @@ import { NoteContent } from "@/components/public/NoteContent";
 import { getPyqs, getPyqFilterOptions, type PyqFilters as Filters } from "@/lib/db/pyqs";
 import type { Stage } from "@/lib/types/database";
 
-export const metadata = { title: "PYQ Vault" };
+export const metadata = { title: "MCQ Vault" };
 export const dynamic = "force-dynamic";
 
 type SearchParams = {
@@ -42,7 +42,7 @@ export default async function PyqsPage({
   return (
     <Container className="py-12">
       <header className="mb-6 max-w-2xl">
-        <h1 className="font-serif text-3xl text-ink">PYQ Vault</h1>
+        <h1 className="font-serif text-3xl text-ink">MCQ Vault</h1>
         <p className="mt-2 text-ink-soft">
           Previous year questions. Reveal prelims answers on click; expand mains
           model answers to study the blueprint.
