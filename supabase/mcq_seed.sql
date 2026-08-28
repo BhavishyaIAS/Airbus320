@@ -7,9 +7,12 @@ begin;
 
 -- ---- Subjects -------------------------------------------------------------
 insert into mcq_subjects (name, slug, description, display_order) values
-  ('History',   'history',   'Ancient, medieval and modern India, plus world history.', 0),
-  ('Geography', 'geography', 'Physical, human and Indian geography.',                   1),
-  ('Polity',    'polity',    'Indian Constitution, governance and political system.',    2)
+  ('History, Art & Culture', 'history',             'Ancient, medieval and modern India, art forms and cultural heritage.', 0),
+  ('Geography',              'geography',           'Physical, human, Indian and world geography.',                          1),
+  ('Polity',                 'polity',              'Indian Constitution, governance and the political system.',             2),
+  ('Economy',                'economy',             'Indian economy, development and core economic concepts.',               3),
+  ('Science & Technology',   'science-technology',  'General science and recent technological developments.',                4),
+  ('Ecology & Environment',  'ecology-environment', 'Ecology, biodiversity, environment and climate change.',                5)
 on conflict (slug) do nothing;
 
 -- ---- Books ----------------------------------------------------------------
