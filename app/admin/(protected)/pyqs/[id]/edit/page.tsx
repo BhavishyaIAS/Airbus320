@@ -22,7 +22,7 @@ export default async function EditPyqPage({
   return (
     <div className="max-w-3xl space-y-6">
       <Link href="/admin/pyqs" className="text-sm text-accent hover:text-accent-ink">
-        ← MCQ vault
+        ← PYQ vault
       </Link>
       <h1 className="font-serif text-2xl text-ink">Edit question</h1>
       <div className="rounded-xl border border-line bg-surface p-5">

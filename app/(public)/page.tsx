@@ -10,7 +10,7 @@ const modules = [
   },
   {
     href: "/pyqs",
-    title: "MCQ Vault",
+    title: "PYQ Vault",
     body: "Previous year Prelims MCQs and Mains questions, filterable by micro-theme, year and tag. Mains questions come with model-answer blueprints.",
     cta: "Open the vault",
   },

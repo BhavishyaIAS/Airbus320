@@ -10,11 +10,11 @@ Commission) aspirants. Two core modules:
 1. **Notes Repository** — exhaustive notes organized to the finest "micro-theme"
    of the syllabus. Rich content: headings, images, Mermaid diagrams, embedded
    YouTube lectures, tables, and math. Exactly **one note per micro-theme**.
-2. **MCQ Vault** — previous year questions. Prelims = MCQs with a correct
+2. **PYQ Vault** — previous year questions. Prelims = MCQs with a correct
    answer; Mains = questions with marks and an optional **model answer**.
    Filterable by micro-theme, tag, year, topic.
 
-Public visitors read notes and use the MCQ vault with **no login**. A single
+Public visitors read notes and use the PYQ vault with **no login**. A single
 **admin** (the product owner) logs in to create/edit/publish everything.
 
 The exam is heavily Andhra-Pradesh-specific (AP history, geography, economy,
@@ -85,7 +85,7 @@ polity), so the content structure must let AP micro-themes be organized clearly.
 2. DB schema + migrations + RLS + seed. ← done
 3. Public read: syllabus tree + note rendering. ← done
 4. Admin auth + micro-theme management + TipTap editor. ← done
-5. MCQ vault + admin PYQ management + model answers. ← done
+5. PYQ vault + admin PYQ management + model answers. ← done
 6. Search, polish, mobile QA. ← done
 7. Deploy to Vercel + custom domain.
 

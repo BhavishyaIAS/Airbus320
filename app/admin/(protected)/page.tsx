@@ -43,7 +43,7 @@ export default async function Dashboard() {
           href="/admin/pyqs"
           className="rounded-xl border border-line bg-surface p-5 hover:border-accent/40"
         >
-          <div className="font-medium text-ink">MCQ vault →</div>
+          <div className="font-medium text-ink">PYQ vault →</div>
           <p className="mt-1 text-sm text-ink-soft">
             Add prelims and mains questions, tags, and model answers.
           </p>

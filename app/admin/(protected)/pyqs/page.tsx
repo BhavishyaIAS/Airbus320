@@ -15,7 +15,7 @@ export default async function AdminPyqsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-serif text-2xl text-ink">MCQ vault</h1>
+          <h1 className="font-serif text-2xl text-ink">PYQ vault</h1>
           <p className="mt-1 text-ink-soft">
             Prelims MCQs and mains questions. Mains can carry a model answer.
           </p>

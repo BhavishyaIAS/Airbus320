@@ -4,7 +4,7 @@ import { SearchBox } from "@/components/public/SearchBox";
 
 const navLinks = [
   { href: "/syllabus", label: "Syllabus" },
-  { href: "/pyqs", label: "MCQ Vault" },
+  { href: "/pyqs", label: "PYQ Vault" },
 ];
 
 export function SiteHeader() {

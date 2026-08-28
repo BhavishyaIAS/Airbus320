@@ -23,7 +23,7 @@ export default async function ModelAnswerPage({
   return (
     <div className="max-w-3xl space-y-5">
       <Link href="/admin/pyqs" className="text-sm text-accent hover:text-accent-ink">
-        ← MCQ vault
+        ← PYQ vault
       </Link>
       <div>
         <h1 className="font-serif text-2xl text-ink">Model answer</h1>
